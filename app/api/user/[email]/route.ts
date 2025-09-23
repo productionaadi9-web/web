@@ -5,10 +5,10 @@ const prisma = new PrismaClient();
 
 export async function GET(
   req: Request,
-  { params }: { params: { email: string } }
+  { params }: { params: Promise<{ email: string }> }
 ) {
   try {
-    const { email } = params;
+    const { email } = await params;
 
     const user = await prisma.user.findFirst({
       where: { email },
