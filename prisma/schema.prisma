@@ -31,8 +31,6 @@ model Events {
   type        String
   image       String[]
   description String
-
-  @@map("events")
 }
 
 enum EventStatus {
