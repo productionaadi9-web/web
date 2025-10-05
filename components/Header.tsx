@@ -13,25 +13,18 @@ export default function Header() {
           <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
             <img src={'/logo.svg'} alt="Logo" className="w-full h-full" />
           </div>
-          <Link href={'/'} className="text-black  font-bold text-lg sm:text-base lg:text-xl">
+          <Link href={'/'} className="text-black font-bold text-sm lg:text-xl">
             AADI SR Production
           </Link>
-
           <div className="hidden lg:flex items-center space-x-8">
-
-
           </div>
-
         </div>
-
-
-
         <div className="flex items-center space-x-6">
           {/* Desktop Login Button & Mobile Menu Button 
+          */}
           <Link href={'/Events'} className="text-white">
           Events
           </Link>
-          */}
           <Link
             href={'/Login'}
             className=""

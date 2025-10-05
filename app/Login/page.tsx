@@ -25,7 +25,7 @@ const navigate = useRouter();
     try {
       setLoading(true);
       if(email === "productionaadi9@gmail.com"){
-        navigate.push("/admin/create-user");
+        navigate.push("/admin");
         setLoading(false);
         return;
       }

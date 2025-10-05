@@ -1,79 +1,63 @@
+"use client"
 import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+interface EventType {
+  id: string;
+  title: string,
+  date: string,
+  location: string,
+  guests: number,
+  status: string,
+  type: string,
+  image: string[],
+  description: string,
+}
+
 
 const Events = () => {
-  const events = [
-    {
-      id: 1,
-      title: "The Grand Wedding of Priya & Rahul",
-      date: "December 15, 2024",
-      location: "Udaipur Palace Hotel",
-      guests: 500,
-      status: "upcoming",
-      type: "Wedding",
-      image: "https://picsum.photos/600/400?random=10",
-      description: "A magnificent celebration of love in the royal city of Udaipur",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Corporate Gala Night 2024",
-      date: "November 28, 2024", 
-      location: "The Leela Mumbai",
-      guests: 300,
-      status: "upcoming",
-      type: "Corporate",
-      image: "https://picsum.photos/600/400?random=11",
-      description: "Annual corporate celebration with awards and networking"
-    },
-    {
-      id: 3,
-      title: "Ananya's Birthday Celebration",
-      date: "October 20, 2024",
-      location: "JW Marriott Delhi",
-      guests: 150,
-      status: "completed",
-      type: "Birthday",
-      image: "https://picsum.photos/600/400?random=12",
-      description: "Elegant milestone birthday party with family and friends"
-    },
-    {
-      id: 4,
-      title: "Diwali Festival Celebration",
-      date: "October 12, 2024",
-      location: "Hotel Taj Palace",
-      guests: 400,
-      status: "completed",
-      type: "Festival",
-      image: "https://picsum.photos/600/400?random=13",
-      description: "Traditional Diwali celebration with cultural performances"
-    },
-    {
-      id: 5,
-      title: "Tech Conference 2024",
-      date: "September 25, 2024",
-      location: "Bangalore Convention Center",
-      guests: 800,
-      status: "completed", 
-      type: "Conference",
-      image: "https://picsum.photos/600/400?random=14",
-      description: "Technology summit with industry leaders and innovators"
-    },
-    {
-      id: 6,
-      title: "Golden Anniversary Celebration",
-      date: "August 15, 2024",
-      location: "The Oberoi Gurgaon",
-      guests: 200,
-      status: "completed",
-      type: "Anniversary",
-      image: "https://picsum.photos/600/400?random=15",
-      description: "50 years of love celebrated with elegance and joy"
-    }
-  ];
+const [events, setEvents] = useState<EventType[]>([
+  {
+    id: "",
+    title: "",
+    date: "",
+    location: "",
+    guests: 0,
+    status: "",
+    type: "",
+    image: [""],
+    description: "",
+  }
+])
+async function fetchEvents(){
+  const response= await axios.get("/api/event")
+  console.log(response.data)
+  setEvents(response.data)
+
+}
+useEffect(()=>{
+fetchEvents()
+},[])
+if (!events[0]) {
+  return (
+    <div className="min-h-screen bg-custom-gradient flex flex-col justify-between">
+      <Header/>
+      <div className="pt-24 pb-16">
+        <div className="container mx-auto px-4 max-w-7xl flex items-center justify-center">
+       <h1 className="text-2xl text-white font-bold">No events yet</h1>
+        </div>
+      </div>
+      <Footer/>
+    </div>
+  );
+}
+
   return (
     <div className="min-h-screen bg-custom-gradient">
       <Header/>
@@ -92,11 +76,12 @@ const Events = () => {
           {/* Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
             {/* Featured Event - Large */}
+            {events[0] &&
             <div className="lg:col-span-2 lg:row-span-2 relative group cursor-pointer">
               <div className="relative h-full min-h-[500px] overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 to-black p-8 hover:scale-[1.02] transition-all duration-500">
                 <div 
                   className="absolute inset-0 opacity-30 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${events[0].image})` }}
+                  style={{ backgroundImage: `url(${events[0].image[0]})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                 
@@ -115,7 +100,7 @@ const Events = () => {
                       {events[0].title}
                     </h3>
                     <p className="text-gray-300 mb-6 text-lg">
-                      {events[0].description}
+                      {events[0].description.slice(0,50)}
                     </p>
                     
                     <div className="space-y-3 mb-8">
@@ -134,13 +119,17 @@ const Events = () => {
                     </div>
 
                     <Button className="bg-white text-black hover:bg-gray-200 transition-colors group">
+                      <Link href={`/Events/${events[0].id}`} className="flex items-center">
                       Event Details
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
                     </Button>
                   </div>
                 </div>
+
               </div>
             </div>
+}
 
             {/* Medium Event Cards */}
             {events.slice(1, 3).map((event, index) => (
@@ -175,12 +164,22 @@ const Events = () => {
                         {event.guests} guests
                       </div>
                     </div>
+                    <Button className="bg-white text-black hover:bg-gray-200 transition-colors group">
+                      <Link href={`/Events/${events[0].id}`} className="flex items-center">
+                      Event Details
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </div>
             ))}
 
             {/* Wide Event Card */}
+            {events[3]&&
+            
+
+        
             <div className="lg:col-span-2 lg:row-span-1 relative group cursor-pointer">
               <div className="relative h-full min-h-[240px] overflow-hidden rounded-3xl bg-gradient-to-r from-gray-900 to-black p-6 hover:scale-[1.02] transition-all duration-500">
                 <div 
@@ -204,7 +203,7 @@ const Events = () => {
                       {events[3].title}
                     </h3>
                     <p className="text-gray-400 mb-4">
-                      {events[3].description}
+                      {events[3].description.slice(0,50)}
                     </p>
                     
                     <div className="flex items-center gap-6 text-sm text-gray-400">
@@ -217,15 +216,21 @@ const Events = () => {
                         {events[3].guests} guests
                       </div>
                     </div>
+                    <Button className="bg-white text-black hover:bg-gray-200 transition-colors group">
+                      <Link href={`/Events/${events[0].id}`} className="flex items-center">
+                      Event Details
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </div>
                   
                   <Button className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm ml-6">
-                    View Photos
+                    Events Details
                   </Button>
                 </div>
               </div>
             </div>
-
+}
             {/* Small Event Cards */}
             {events.slice(4).map((event, index) => (
               <div key={event.id} className="lg:col-span-1 lg:row-span-1 relative group cursor-pointer">
@@ -259,6 +264,12 @@ const Events = () => {
                         {event.guests} guests
                       </div>
                     </div>
+                    <Button className="bg-white text-black hover:bg-gray-200 transition-colors group">
+                      <Link href={`/Events/${events[0].id}`} className="flex items-center">
+                      Event Details
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </div>
