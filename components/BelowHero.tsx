@@ -42,8 +42,8 @@ export default function BelowHero() {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
-      <DraggableCardContainer className="relative flex min-h-screen w-full items-center justify-center overflow-clip">
+    <div className=" bg-black">
+      <DraggableCardContainer className="relative flex w-full h-svh items-center justify-center overflow-clip">
         {/*<p className="absolute top-1/2 flex flex-col mx-auto max-w-sm -translate-y-3/4 text-center text-2xl font-black text-neutral-400 md:text-4xl">
         still not convinced?
         <Link href="/Events">
