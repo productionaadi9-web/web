@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     // Increase body size limit for API routes (10MB in this example)
-    serverComponentsExternalPackages: ['cloudinary'],
+    serverComponentsExternalPackages: ['cloudinary','tinify'],
   },
   api: {
     bodyParser: {
